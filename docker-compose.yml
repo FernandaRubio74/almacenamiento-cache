@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+
+  database:
+    container_name: db1
+    image: postgres:17
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: servicio1
+    volumes:
+       - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  
+  app:
+    container_name: app-principal
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+      - cache
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: servicio1
+  
+  service2:
+    container_name: app-service2
+    build: .
+    command: node servicio2.js
+
+  cache:
+    image: redis:7
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly no --save ""
+
+volumes:
+  db_data:
