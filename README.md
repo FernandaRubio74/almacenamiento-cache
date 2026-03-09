@@ -155,7 +155,7 @@ docker compose down
 docker compose down -v
 ```
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 tarea3/
